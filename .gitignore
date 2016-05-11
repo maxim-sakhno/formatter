@@ -1,0 +1,9 @@
+# Specific things for Intellij IDEA:
+.idea
+target
+*iml
+
+
+# Build:
+*.class
+*.jar
