@@ -18,14 +18,11 @@ public class FileReader implements IReader, Closeable {
      * Open character input stream from file.
      *
      * @param file - input file.
+     * @throws IOException if an I/O error occurs.
      */
-    public FileReader(final File file) throws ReaderException {
-        try {
-            input = new InputStreamReader(new FileInputStream(file));
-            currentChar = input.read();
-        } catch (Exception exception) {
-            throw new ReaderException(exception);
-        }
+    public FileReader(final File file) throws IOException {
+        input = new InputStreamReader(new FileInputStream(file));
+        currentChar = input.read();
     }
 
 
@@ -50,7 +47,7 @@ public class FileReader implements IReader, Closeable {
         char result = (char) currentChar;
         try {
             currentChar = input.read();
-        } catch(Exception exception) {
+        } catch (Exception exception) {
             throw new ReaderException(exception);
         }
         return result;
@@ -61,7 +58,7 @@ public class FileReader implements IReader, Closeable {
      * with it. If the stream is already closed then invoking this
      * method has no effect.
      *
-     * @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs.
      */
     public void close() throws IOException {
         input.close();
