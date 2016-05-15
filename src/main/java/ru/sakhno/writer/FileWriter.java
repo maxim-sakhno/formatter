@@ -7,7 +7,7 @@ import java.io.*;
 /**
  * Character file output stream.
  */
-public class FileWriter implements IWriter, Closeable, Flushable {
+public class FileWriter implements IWriter {
 
 
     private OutputStreamWriter output;
@@ -19,8 +19,12 @@ public class FileWriter implements IWriter, Closeable, Flushable {
      * @param file - output file.
      * @throws IOException if an I/O error occurs.
      */
-    public FileWriter(final File file) throws IOException {
-        output = new OutputStreamWriter(new FileOutputStream(file));
+    public FileWriter(final File file) throws WriterException {
+        try {
+            output = new OutputStreamWriter(new FileOutputStream(file));
+        } catch (Exception exception) {
+            throw new WriterException(exception);
+        }
     }
 
 
@@ -46,8 +50,12 @@ public class FileWriter implements IWriter, Closeable, Flushable {
      *
      * @throws IOException if an I/O error occurs
      */
-    public void close() throws IOException {
-        output.close();
+    public void close() throws WriterException {
+        try {
+            output.close();
+        } catch (Exception exception) {
+            throw new WriterException(exception);
+        }
     }
 
 
@@ -57,7 +65,11 @@ public class FileWriter implements IWriter, Closeable, Flushable {
      *
      * @throws IOException If an I/O error occurs.
      */
-    public void flush() throws IOException {
-        output.flush();
+    public void flush() throws WriterException {
+        try {
+            output.flush();
+        } catch (Exception exception) {
+            throw new WriterException(exception);
+        }
     }
 }

@@ -7,7 +7,7 @@ import java.io.*;
 /**
  * Character file input stream.
  */
-public class FileReader implements IReader, Closeable {
+public class FileReader implements IReader {
 
 
     private InputStreamReader input;
@@ -20,9 +20,13 @@ public class FileReader implements IReader, Closeable {
      * @param file - input file.
      * @throws IOException if an I/O error occurs.
      */
-    public FileReader(final File file) throws IOException {
-        input = new InputStreamReader(new FileInputStream(file));
-        currentChar = input.read();
+    public FileReader(final File file) throws ReaderException {
+        try {
+            input = new InputStreamReader(new FileInputStream(file));
+            currentChar = input.read();
+        } catch (Exception exception) {
+            throw new ReaderException(exception);
+        }
     }
 
 
@@ -60,7 +64,11 @@ public class FileReader implements IReader, Closeable {
      *
      * @throws IOException if an I/O error occurs.
      */
-    public void close() throws IOException {
-        input.close();
+    public void close() throws ReaderException {
+        try {
+            input.close();
+        } catch (Exception exception) {
+            throw new ReaderException(exception);
+        }
     }
 }

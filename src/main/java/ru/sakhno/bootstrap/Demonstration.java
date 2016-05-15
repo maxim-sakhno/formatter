@@ -33,7 +33,7 @@ final class Demonstration {
      * Main method.
      * @param args - command line arguments.
      */
-    public static void main(final String[] args) throws IOException, FormatterException {
+    public static void main(final String[] args) throws WriterException, ReaderException, FormatterException {
         FileReader reader = new FileReader(new File("input.txt"));
         FileWriter writer = new FileWriter(new File("output.txt"));
         List<Pair<Pair<Token, Token>, Token>> mappingSeparator = new LinkedList<Pair<Pair<Token, Token>, Token>>();
@@ -106,6 +106,7 @@ final class Demonstration {
         IFormatter formatter = new JavaFormatter(rule);
         formatter.format(reader, writer);
         writer.flush();
+        writer.close();
     }
 
 
