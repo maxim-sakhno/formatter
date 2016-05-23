@@ -1,24 +1,20 @@
 package ru.sakhno.formatter;
 
-
-import ru.sakhno.reader.IReader;
+import ru.sakhno.tockenizer.ITokenizer;
 import ru.sakhno.writer.IWriter;
 
-
 /**
- * Format stream.
+ * Describes formatter which format input stream
+ * from the tokenizer to output stream from the writer.
  */
 public interface IFormatter {
-
-
     /**
-     * Formats input stream to output stream.
+     * Formats input stream from the tokenizer
+     * to output stream from the writer.
      *
-     * @param input - input stream.
-     * @param output - output stream.
-     * @throws FormatterException if something happens.
+     * @param tokenizer the tokenizer to input.
+     * @param writer the writer to output.
+     * @throws FormatterException if some error occur.
      */
-    void format(final IReader input, final IWriter output) throws FormatterException;
-
-
+    void format(final ITokenizer tokenizer, IWriter writer) throws FormatterException;
 }

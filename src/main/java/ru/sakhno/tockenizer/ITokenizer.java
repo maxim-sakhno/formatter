@@ -1,28 +1,24 @@
 package ru.sakhno.tockenizer;
 
-
 /**
- * Interface describes parser into words.
+ * Describe tokenizer that breaks input stream into tokens.
  */
 public interface ITokenizer {
-
-
     /**
-     * Checks next token.
+     * Test if token is available.
      *
-     * @return true if has next token.
-     * @throws TokenizerException if checking error occur.
+     * @return true if token is available and false otherwise.
+     * @throws TokenizerException if some error occurs.
      */
     boolean hasNext() throws TokenizerException;
 
-
     /**
-     * Return next token.
+     * Returns next token if he available and throw TokenizerException
+     * if some error occurs or no tokens in the input stream.
      *
-     * @return next token.
-     * @throws TokenizerException if no tokens to return.
+     * @return next token if he available.
+     * @throws TokenizerException if some error occurs or no tokens
+     * in the input stream.
      */
-    Token getToken() throws TokenizerException;
-
-
+    String getToken() throws TokenizerException;
 }

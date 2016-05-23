@@ -1,30 +1,28 @@
 package ru.sakhno.tockenizer;
 
-
 /**
- * Exception for tokenizer.
+ * The exception for tokenizer.
  */
 public class TokenizerException extends Exception {
 
-
     /**
-     * Creates TokenizerException with exception.
+     * Constructs new tokenizer exception with
+     * the other exception.
      *
-     * @param exception - other exception.
+     * @param exception the other exception.
      */
-    public TokenizerException(final Exception exception) {
+    TokenizerException(final Exception exception) {
         super(exception);
     }
 
-
     /**
-     * Creates TokenizerException with message.
+     * Constructs new tokenizer exception with
+     * the specified detail message.
      *
-     * @param message - error description.
+     * @param message the message specified detail.
      */
-    public TokenizerException(final String message) {
+    TokenizerException(final String message) {
         super(message);
     }
-
 
 }

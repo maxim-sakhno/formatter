@@ -1,23 +1,21 @@
 package ru.sakhno.writer;
 
-
-import java.io.*;
-
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
 
 /**
  * Character file output stream.
  */
 public class FileWriter implements IWriter {
 
-
     private OutputStreamWriter output;
-
 
     /**
      * Creates character output file stream.
      *
      * @param file - output file.
-     * @throws IOException if an I/O error occurs.
+     * @throws WriterException if an error occurs.
      */
     public FileWriter(final File file) throws WriterException {
         try {
@@ -26,7 +24,6 @@ public class FileWriter implements IWriter {
             throw new WriterException(exception);
         }
     }
-
 
     /**
      * Writes string to stream.
@@ -42,13 +39,12 @@ public class FileWriter implements IWriter {
         }
     }
 
-
     /**
      * Closes this stream and releases any system resources associated
      * with it. If the stream is already closed then invoking this
      * method has no effect.
      *
-     * @throws IOException if an I/O error occurs
+     * @throws WriterException if an error occurs
      */
     public void close() throws WriterException {
         try {
@@ -58,12 +54,11 @@ public class FileWriter implements IWriter {
         }
     }
 
-
     /**
      * Flushes this stream by writing any buffered output to the underlying
      * stream.
      *
-     * @throws IOException If an I/O error occurs.
+     * @throws WriterException If an error occurs.
      */
     public void flush() throws WriterException {
         try {
@@ -72,4 +67,5 @@ public class FileWriter implements IWriter {
             throw new WriterException(exception);
         }
     }
+
 }

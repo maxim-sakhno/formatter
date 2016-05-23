@@ -1,92 +1,99 @@
 package ru.sakhno.tockenizer;
 
-
 import ru.sakhno.reader.IReader;
 
-
 /**
- * Tokenizer using reader interface to parsing stream.
+ * The tokenizer for reader input stream.
  */
 public class ReaderTokenizer implements ITokenizer {
-
-
+    private String[] tokens;
     private IReader reader;
-    private String separators;
-    private StringBuilder token;
-
+    private String buffer;
+    private static final int BUFFER_STRING_LENGTH = 256;
 
     /**
-     * Creates tokenizer for reader.
-     * Returns strings between separators, separators.
+     * Creates new reader tokenizer.
      *
-     * @param reader - stream for parsing.
-     * @param separators - separators for parsing.
+     * @param tokens the tokens for finding in the input stream.
+     * @param reader the input stream for breaking into the tokens.
      */
-    public ReaderTokenizer(final IReader reader, final String separators) {
+    public ReaderTokenizer(final String[] tokens, final IReader reader) {
+        this.tokens = tokens;
         this.reader = reader;
-        this.separators = separators;
-        token = new StringBuilder();
+        buffer = "";
     }
 
-
     /**
-     * Checks next token.
+     * Test if token is available.
      *
-     * @return true if has next token.
-     * @throws TokenizerException if checking error occur.
+     * @return true if token is available and false otherwise.
+     * @throws TokenizerException if some error occurs.
      */
     public boolean hasNext() throws TokenizerException {
         boolean result;
         try {
-            result = reader.hasNext() || token.length() != 0;
+            result = reader.hasNext() || buffer.length() != 0;
         } catch (Exception exception) {
             throw new TokenizerException(exception);
         }
         return result;
     }
-
 
     /**
-     * Return next token if it exist.
+     * Returns next token if he available and throw TokenizerException
+     * if some error occurs or no tokens in the input stream.
      *
-     * @return next token.
-     * @throws TokenizerException if no tokens to return.
+     * @return next token if he available.
+     * @throws TokenizerException if some error occurs or no tokens
+     *                            in the input stream.
      */
-    public Token getToken() throws TokenizerException {
-        if (!hasNext() && token.length() == 0) {
-            throw new TokenizerException("No token.");
+    public String getToken() throws TokenizerException {
+        if (!hasNext()) {
+            throw new TokenizerException("No tokens in the stream.");
         }
-        if (token.length() != 0) {
-            Token result = new Token(token.toString());
-            token.delete(0, token.length());
-            return result;
+        if (buffer.length() < BUFFER_STRING_LENGTH) {
+            buffer += readBufferString();
         }
-        char simbol = 0;
+        int tokenIndex = -1;
+        int tokenLength = -1;
         try {
-            simbol = reader.read();
-            while (reader.hasNext() && separators.indexOf(simbol) == -1) {
-                token.append(simbol);
-                simbol = reader.read();
-            }
-            if (separators.indexOf(simbol) == -1) {
-                token.append(simbol);
+            for (int i = 0; i < tokens.length; ++i) {
+                int tempIndex = buffer.indexOf(tokens[i]);
+                if (tempIndex != -1 && (tokenIndex == -1 || tempIndex < tokenIndex)) {
+                    tokenIndex = tempIndex;
+                    tokenLength = tokens[i].length();
+                }
             }
         } catch (Exception exception) {
             throw new TokenizerException(exception);
         }
-        if (token.length() == 0) {
-            return new Token(Character.toString(simbol));
-        }
-        if (separators.indexOf(simbol) != -1) {
-            Token result = new Token(token.toString());
-            token.delete(0, token.length());
-            token.append(simbol);
+        if (tokenIndex == -1) {
+            String result = buffer;
+            buffer = "";
             return result;
         }
-        Token result = new Token(token.toString());
-        token.delete(0, token.length());
+        if (tokenIndex == 0) {
+            String result = buffer.substring(0, tokenLength);
+            buffer = buffer.substring(tokenLength, buffer.length());
+            return result;
+        }
+        String result = buffer.substring(0, tokenIndex);
+        buffer = buffer.substring(tokenIndex, buffer.length());
         return result;
     }
 
-
+    private String readBufferString() throws TokenizerException {
+        StringBuilder result = new StringBuilder();
+        int readedCharCounter = 0;
+        try {
+            while (reader.hasNext() && readedCharCounter < BUFFER_STRING_LENGTH) {
+                char temp = reader.read();
+                result.append(temp);
+                ++readedCharCounter;
+            }
+        } catch (Exception exception) {
+            throw new TokenizerException(exception);
+        }
+        return result.toString();
+    }
 }

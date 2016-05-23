@@ -1,30 +1,24 @@
 package ru.sakhno.formatter;
 
-
 /**
  * Exception for formatter.
  */
 public class FormatterException extends Exception {
-
-
     /**
-     * Creates FormatterException with other exception.
+     * Creates exception with message.
      *
-     * @param exception - other exception.
-     */
-    public FormatterException(final Exception exception) {
-        super(exception);
-    }
-
-
-    /**
-     * Creates FormatterException with message.
-     *
-     * @param message - exception description.
+     * @param message the message describing the error.
      */
     public FormatterException(final String message) {
         super(message);
     }
 
-
+    /**
+     * Creates exception based other exception.
+     *
+     * @param exception the other exception describing the error.
+     */
+    public FormatterException(final Exception exception) {
+        super(exception);
+    }
 }
